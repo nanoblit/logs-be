@@ -1,0 +1,29 @@
+{
+  "name": "logs-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "nodemon dist/index.js",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nanoblit/logs-be.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nanoblit/logs-be/issues"
+  },
+  "homepage": "https://github.com/nanoblit/logs-be#readme",
+  "dependencies": {
+    "@types/express": "^4.17.8",
+    "@types/mssql": "^6.0.4",
+    "@types/node": "^14.6.4",
+    "express": "^4.17.1",
+    "mssql": "^6.2.1",
+    "typescript": "^4.0.2"
+  }
+}
