@@ -14,7 +14,7 @@ const config: sql.config = {
   database: "xelcode",
 };
 
-// In frontend send user and status with %%
+// TODO: Add validation.
 
 const getLogs = async ({
   startDate,
