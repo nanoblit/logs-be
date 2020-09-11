@@ -14,9 +14,7 @@ const config: sql.config = {
   database: "xelcode",
 };
 
-// TODO: Sanitize query
-// TODO: Make connect functions that takes all possible inputs and returns a result based on them
-// TODO: Make the endpoint take all the possible values and if some are missing, make them default to something that will return everything
+// In frontend send user and status with %%
 
 const getLogs = async ({
   startDate,
@@ -32,6 +30,9 @@ const getLogs = async ({
   startingRow: number;
 }): Promise<any> => {
   try {
+    user = `%${user}%`;
+    status = `%${status}%`;
+
     const pool = new sql.ConnectionPool(config);
 
     await pool.connect();
@@ -53,7 +54,6 @@ const getLogs = async ({
       fetch next ${ROWS_TO_FETCH} rows only
     `;
     const data = (await request.query(statement)).recordset;
-    console.log(data);
 
     statement = `
     select count(*) from LogHeader where 
