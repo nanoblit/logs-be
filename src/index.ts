@@ -1,11 +1,13 @@
 import express from "express";
 import * as sql from "mssql";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
-const ROWS_TO_FETCH = 100;
+const ROWS_TO_FETCH = 20;
 
 const config: sql.config = {
   user: "xelcode",
@@ -14,24 +16,27 @@ const config: sql.config = {
   database: "xelcode",
 };
 
-// TODO: Add validation.
+// TODO: Add validation. (only positive pages)
+// TODO: Readme
+// TODO: Change to use pages instead of startingRow
 
 const getLogs = async ({
   startDate,
   endDate,
   user,
   status,
-  startingRow,
+  page,
 }: {
   startDate: string;
   endDate: string;
   user: string;
   status: string;
-  startingRow: number;
+  page: number;
 }): Promise<any> => {
   try {
     user = `%${user}%`;
     status = `%${status}%`;
+    const startingRow = (page - 1) * ROWS_TO_FETCH;
 
     const pool = new sql.ConnectionPool(config);
 
@@ -61,21 +66,22 @@ const getLogs = async ({
       (MobileUserId like @user) and 
       (Status like @status)
     `;
-    const recordsNumber = (await request.query(statement)).recordset[0][""];
+    const pages = Math.ceil((await request.query(statement)).recordset[0][""] / ROWS_TO_FETCH);
 
-    return { data, recordsNumber };
+    return { data, pages };
   } catch (err) {
     throw err.message ?? err.originalError.message;
   }
 };
 
-app.get("/", async (req, res) => {
-  const data = req.body;
+app.post("/", async (req, res) => {
+  const { data } = req.body;
   try {
     const logs = await getLogs(data);
     res.status(200).json(logs);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).send(err);
+    console.error(err);
   }
 });
 
