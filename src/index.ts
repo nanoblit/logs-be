@@ -16,10 +16,6 @@ const config: sql.config = {
   database: "xelcode",
 };
 
-// TODO: Add validation. (only positive pages)
-// TODO: Readme
-// TODO: Change to use pages instead of startingRow
-
 const getLogs = async ({
   startDate,
   endDate,
